@@ -1,14 +1,5 @@
 apply plugin: 'com.android.application'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
-    }
-}
-
 android {
     compileSdkVersion 18
     buildToolsVersion "19.1.0"
@@ -25,9 +16,9 @@ dependencies {
     repositories {
         maven {
             // this must point to the myorepository distributed with the Myo SDK
-            url 'myorepository'
+            url '../../myorepository'
         }
     }
-
+    
     compile 'com.thalmic:myosdk:0.10.0@aar'
 }

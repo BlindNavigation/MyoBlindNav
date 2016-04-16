@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
@@ -25,7 +24,9 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
-public class HelloWorldActivity extends Activity {
+import java.util.ArrayList;
+
+public class MainActivity extends Activity {
 
     private TextView mLockStateView;
     private TextView mTextView;
@@ -167,7 +168,13 @@ public class HelloWorldActivity extends Activity {
             return;
         }
 
+        hub.setMyoAttachAllowance(2);
         // Next, register for DeviceListener callbacks.
+        ArrayList<Myo> myos = hub.getConnectedDevices();
+
+        for (Myo m:myos) {
+            m.vibrate(Myo.VibrationType.LONG);
+        }
         hub.addListener(mListener);
     }
 

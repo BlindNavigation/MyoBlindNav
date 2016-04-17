@@ -67,12 +67,11 @@ public class MainActivity extends Activity {
         @Override
         public void onConnect(Myo myo, long timestamp) {
             if(myo.getName().toString().equals(MYO_LEFT)) {
-                mTextViewOne.setText(MYO_LEFT + " connected");
+                mTextViewOne.setText(R.string.arm_left_detected);
                 addLeftBuzzButtonListener(myo);
             }
-
             if(myo.getName().toString().equals(MYO_RIGHT)) {
-                mTextViewTwo.setText(MYO_RIGHT + " connected");
+                mTextViewTwo.setText(R.string.arm_right_detected);
                 addRightBuzzButtonListener(myo);
             }
         }
@@ -80,26 +79,23 @@ public class MainActivity extends Activity {
         // onDisconnect() is called whenever a Myo has been disconnected.
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
-
-            if(myo.getName().toString().equals(MYO_LEFT)) {
-                mTextViewOne.setText(MYO_LEFT + " disconnected");
+            if (myo.getName().toString().equals(MYO_LEFT)) {
+                mTextViewOne.setText(R.string.arm_left_waiting);
             }
-
-            if(myo.getName().toString().equals(MYO_RIGHT)) {
-                mTextViewTwo.setText(MYO_RIGHT + " disconnected");
+            if (myo.getName().toString().equals(MYO_RIGHT)) {
+                mTextViewTwo.setText(R.string.arm_right_waiting);
             }
-
         }
 
         // onArmSync() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
         // arm. This lets Myo know which arm it's on and which way it's facing.
         @Override
         public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
-            if(myo.getArm() == Arm.LEFT) {
-                mTextViewOne.setText(R.string.arm_left);
+            if (arm == Arm.LEFT) {
+                mTextViewOne.setText(R.string.arm_left_ready);
             }
-            if(myo.getArm() == Arm.RIGHT) {
-                mTextViewTwo.setText(R.string.arm_right);
+            if (arm == Arm.RIGHT) {
+                mTextViewTwo.setText(R.string.arm_right_ready);
             }
         }
     };
@@ -179,7 +175,8 @@ public class MainActivity extends Activity {
                         myoLeft.vibrate(Myo.VibrationType.SHORT);
                     }
                 }
-            });
+            }
+        );
     }
 
     public void addRightBuzzButtonListener(final Myo myoRight) {
@@ -191,6 +188,7 @@ public class MainActivity extends Activity {
                         myoRight.vibrate(Myo.VibrationType.SHORT);
                     }
                 }
-            });
+            }
+        );
     }
 }

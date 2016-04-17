@@ -1,10 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.thalmic.android.sample.helloworld.MainActivity"
-    tools:ignore="MergeRootFrame">
+    tools:ignore="MergeRootFrame"
+              android:orientation="vertical">
 
     <TextView
         android:id="@+id/lock_state"
@@ -17,12 +18,23 @@
         tools:ignore="SpUsage"/>
 
     <TextView
-        android:id="@+id/text"
-        android:text="@string/navigate"
-        android:textSize="50dp"
+        android:id="@+id/myoone"
+        android:textSize="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         tools:ignore="SpUsage"/>
 
-</FrameLayout>
+    <TextView
+            android:id="@+id/myotwo"
+            android:textSize="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:ignore="SpUsage"/>
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center">
+        <Button android:id="@+id/buzzleft" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/buzz_left"/>
+        <Button android:id="@+id/buzzright" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/buzz_right"/>
+    </LinearLayout>
+
+</LinearLayout>

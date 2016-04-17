@@ -7,11 +7,12 @@ package com.thalmic.android.sample.helloworld;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.thalmic.myo.AbstractDeviceListener;
@@ -19,16 +20,18 @@ import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
-import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
-
-import java.util.ArrayList;
 
 public class MainActivity extends Activity {
 
     private TextView mLockStateView;
-    private TextView mTextView;
+    private TextView mTextViewOne;
+    private TextView mTextViewTwo;
+    private final String MYO_RIGHT = "MyoRight";
+    private final String MYO_LEFT = "MyoLeft";
+    private Button leftBuzzButton;
+    private Button rightBuzzButton;
 
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
@@ -37,34 +40,47 @@ public class MainActivity extends Activity {
         // onConnect() is called whenever a Myo has been connected.
         @Override
         public void onConnect(Myo myo, long timestamp) {
-            // Set the text color of the text view to cyan when a Myo connects.
-            mTextView.setTextColor(Color.CYAN);
             // Tell the Myo to stay unlocked until told otherwise. We do that here so you can
             // hold the poses without the Myo becoming locked.
             myo.unlock(Myo.UnlockType.HOLD);
+
+            if(myo.getName().toString().equals(MYO_LEFT)) {
+                mTextViewOne.setText(MYO_LEFT + " connected");
+                addLeftBuzzButtonListener(myo);
+            }
+
+            if(myo.getName().toString().equals(MYO_RIGHT)) {
+                mTextViewTwo.setText(MYO_RIGHT + " connected");
+                addRightBuzzButtonListener(myo);
+            }
         }
 
         // onDisconnect() is called whenever a Myo has been disconnected.
         @Override
         public void onDisconnect(Myo myo, long timestamp) {
-            // Set the text color of the text view to red when a Myo disconnects.
-            mTextView.setTextColor(Color.RED);
+
+            if(myo.getName().toString().equals(MYO_LEFT)) {
+                mTextViewOne.setText(MYO_LEFT + " disconnected");
+            }
+
+            if(myo.getName().toString().equals(MYO_RIGHT)) {
+                mTextViewTwo.setText(MYO_RIGHT + " disconnected");
+            }
+
         }
 
         // onArmSync() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
         // arm. This lets Myo know which arm it's on and which way it's facing.
         @Override
         public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
-            mTextView.setText(myo.getArm() == Arm.LEFT ? R.string.arm_left : R.string.arm_right);
+            if(myo.getArm() == Arm.LEFT) {
+                mTextViewOne.setText(R.string.arm_left);
+            }
+            if(myo.getArm() == Arm.RIGHT) {
+                mTextViewTwo.setText(R.string.arm_right);
+            }
         }
 
-        // onArmUnsync() is called whenever Myo has detected that it was moved from a stable position on a person's arm after
-        // it recognized the arm. Typically this happens when someone takes Myo off of their arm, but it can also happen
-        // when Myo is moved around on the arm.
-        @Override
-        public void onArmUnsync(Myo myo, long timestamp) {
-            mTextView.setText(R.string.navigate);
-        }
 
         // onUnlock() is called whenever a synced Myo has been unlocked. Under the standard locking
         // policy, that means poses will now be delivered to the listener.
@@ -87,7 +103,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_navigate);
 
         mLockStateView = (TextView) findViewById(R.id.lock_state);
-        mTextView = (TextView) findViewById(R.id.text);
+        mTextViewOne = (TextView) findViewById(R.id.myoone);
+        mTextViewTwo = (TextView) findViewById(R.id.myotwo);
 
         // First, we initialize the Hub singleton with an application identifier.
         Hub hub = Hub.getInstance();
@@ -99,13 +116,8 @@ public class MainActivity extends Activity {
         }
 
         hub.setMyoAttachAllowance(2);
-        // Next, register for DeviceListener callbacks.
-        ArrayList<Myo> myos = hub.getConnectedDevices();
-
-        for (Myo m:myos) {
-            m.vibrate(Myo.VibrationType.LONG);
-        }
         hub.addListener(mListener);
+
     }
 
     @Override
@@ -142,5 +154,31 @@ public class MainActivity extends Activity {
         // Launch the ScanActivity to scan for Myos to connect to.
         Intent intent = new Intent(this, ScanActivity.class);
         startActivity(intent);
+    }
+
+    public void addLeftBuzzButtonListener(final Myo myoLeft) {
+        leftBuzzButton = (Button) findViewById(R.id.buzzleft);
+        leftBuzzButton.setOnClickListener(
+            new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (myoLeft != null) {
+                        myoLeft.vibrate(Myo.VibrationType.SHORT);
+                    }
+                }
+            });
+
+    }
+
+    public void addRightBuzzButtonListener(final Myo myoRight) {
+        leftBuzzButton = (Button) findViewById(R.id.buzzright);
+        leftBuzzButton.setOnClickListener(
+            new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if(myoRight != null) {
+                        myoRight.vibrate(Myo.VibrationType.SHORT);
+                    }
+                }
+            });
+
     }
 }

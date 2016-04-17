@@ -6,7 +6,11 @@
 package com.thalmic.android.sample.helloworld;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,15 +27,37 @@ import com.thalmic.myo.Myo;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
+
 public class MainActivity extends Activity {
 
-    private TextView mLockStateView;
-    private TextView mTextViewOne;
-    private TextView mTextViewTwo;
     private final String MYO_RIGHT = "MyoRight";
     private final String MYO_LEFT = "MyoLeft";
+
+    private TextView mGpsLocation;
+    private TextView mTextViewOne;
+    private TextView mTextViewTwo;
     private Button leftBuzzButton;
     private Button rightBuzzButton;
+
+
+    class MyLocationListener implements LocationListener {
+        @Override
+        public void onLocationChanged(Location loc) {
+            String longitude = "Longitude: " + loc.getLongitude();
+            String latitude = "Latitude: " + loc.getLatitude();
+            mGpsLocation.setText(longitude + "\n" + latitude);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+    }
+
 
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
@@ -83,11 +109,18 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigate);
 
-        mLockStateView = (TextView) findViewById(R.id.lock_state);
+        // Set text
+        mGpsLocation = (TextView) findViewById(R.id.location);
         mTextViewOne = (TextView) findViewById(R.id.myoone);
         mTextViewTwo = (TextView) findViewById(R.id.myotwo);
 
-        // First, we initialize the Hub singleton with an application identifier.
+        // Init GPS listener
+        LocationManager locationManager = (LocationManager)
+        getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new MyLocationListener();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+
+        // Initialize the Myo Hub singleton with an application identifier
         Hub hub = Hub.getInstance();
         if (!hub.init(this, getPackageName())) {
             // We can't do anything with the Myo device if the Hub can't be initialized, so exit.
@@ -150,8 +183,8 @@ public class MainActivity extends Activity {
     }
 
     public void addRightBuzzButtonListener(final Myo myoRight) {
-        leftBuzzButton = (Button) findViewById(R.id.buzzright);
-        leftBuzzButton.setOnClickListener(
+        rightBuzzButton = (Button) findViewById(R.id.buzzright);
+        rightBuzzButton.setOnClickListener(
             new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     if(myoRight != null) {

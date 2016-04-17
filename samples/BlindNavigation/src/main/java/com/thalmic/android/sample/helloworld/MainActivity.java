@@ -40,10 +40,6 @@ public class MainActivity extends Activity {
         // onConnect() is called whenever a Myo has been connected.
         @Override
         public void onConnect(Myo myo, long timestamp) {
-            // Tell the Myo to stay unlocked until told otherwise. We do that here so you can
-            // hold the poses without the Myo becoming locked.
-            myo.unlock(Myo.UnlockType.HOLD);
-
             if(myo.getName().toString().equals(MYO_LEFT)) {
                 mTextViewOne.setText(MYO_LEFT + " connected");
                 addLeftBuzzButtonListener(myo);
@@ -80,21 +76,6 @@ public class MainActivity extends Activity {
                 mTextViewTwo.setText(R.string.arm_right);
             }
         }
-
-
-        // onUnlock() is called whenever a synced Myo has been unlocked. Under the standard locking
-        // policy, that means poses will now be delivered to the listener.
-        @Override
-        public void onUnlock(Myo myo, long timestamp) {
-            mLockStateView.setText(R.string.unlocked);
-        }
-
-        // onLock() is called whenever a synced Myo has been locked. Under the standard locking
-        // policy, that means poses will no longer be delivered to the listener.
-        @Override
-        public void onLock(Myo myo, long timestamp) {
-            mLockStateView.setText(R.string.locked);
-        }
     };
 
     @Override
@@ -115,9 +96,9 @@ public class MainActivity extends Activity {
             return;
         }
 
+        hub.setLockingPolicy(Hub.LockingPolicy.NONE);
         hub.setMyoAttachAllowance(2);
         hub.addListener(mListener);
-
     }
 
     @Override
@@ -166,7 +147,6 @@ public class MainActivity extends Activity {
                     }
                 }
             });
-
     }
 
     public void addRightBuzzButtonListener(final Myo myoRight) {
@@ -179,6 +159,5 @@ public class MainActivity extends Activity {
                     }
                 }
             });
-
     }
 }

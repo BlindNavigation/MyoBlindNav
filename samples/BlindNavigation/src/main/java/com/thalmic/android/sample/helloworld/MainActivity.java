@@ -40,6 +40,9 @@ public class MainActivity extends Activity {
         public void onConnect(Myo myo, long timestamp) {
             // Set the text color of the text view to cyan when a Myo connects.
             mTextView.setTextColor(Color.CYAN);
+            // Tell the Myo to stay unlocked until told otherwise. We do that here so you can
+            // hold the poses without the Myo becoming locked.
+            myo.unlock(Myo.UnlockType.HOLD);
         }
 
         // onDisconnect() is called whenever a Myo has been disconnected.
@@ -97,57 +100,6 @@ public class MainActivity extends Activity {
             mTextView.setRotation(roll);
             mTextView.setRotationX(pitch);
             mTextView.setRotationY(yaw);
-        }
-
-        // onPose() is called whenever a Myo provides a new pose.
-        @Override
-        public void onPose(Myo myo, long timestamp, Pose pose) {
-            // Handle the cases of the Pose enumeration, and change the text of the text view
-            // based on the pose we receive.
-            switch (pose) {
-                case UNKNOWN:
-                    mTextView.setText(getString(R.string.hello_world));
-                    break;
-                case REST:
-                case DOUBLE_TAP:
-                    int restTextId = R.string.hello_world;
-                    switch (myo.getArm()) {
-                        case LEFT:
-                            restTextId = R.string.arm_left;
-                            break;
-                        case RIGHT:
-                            restTextId = R.string.arm_right;
-                            break;
-                    }
-                    mTextView.setText(getString(restTextId));
-                    break;
-                case FIST:
-                    mTextView.setText(getString(R.string.pose_fist));
-                    break;
-                case WAVE_IN:
-                    mTextView.setText(getString(R.string.pose_wavein));
-                    break;
-                case WAVE_OUT:
-                    mTextView.setText(getString(R.string.pose_waveout));
-                    break;
-                case FINGERS_SPREAD:
-                    mTextView.setText(getString(R.string.pose_fingersspread));
-                    break;
-            }
-
-            if (pose != Pose.UNKNOWN && pose != Pose.REST) {
-                // Tell the Myo to stay unlocked until told otherwise. We do that here so you can
-                // hold the poses without the Myo becoming locked.
-                myo.unlock(Myo.UnlockType.HOLD);
-
-                // Notify the Myo that the pose has resulted in an action, in this case changing
-                // the text on the screen. The Myo will vibrate.
-                myo.notifyUserAction();
-            } else {
-                // Tell the Myo to stay unlocked only for a short period. This allows the Myo to
-                // stay unlocked while poses are being performed, but lock after inactivity.
-                myo.unlock(Myo.UnlockType.TIMED);
-            }
         }
     };
 

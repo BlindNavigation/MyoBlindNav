@@ -44,8 +44,8 @@
         tools:ignore="SpUsage"/>
 
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center">
-        <Button android:id="@+id/buzzleft" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/buzz_left"/>
-        <Button android:id="@+id/buzzright" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/buzz_right"/>
+        <Button android:id="@+id/buzzleft" android:layout_weight=".5"  android:layout_width="0dip" android:layout_height="fill_parent" android:text="@string/buzz_left"/>
+        <Button android:id="@+id/buzzright" android:layout_weight=".5" android:layout_width="0dip" android:layout_height="fill_parent" android:text="@string/buzz_right"/>
     </LinearLayout>
 
 </LinearLayout>

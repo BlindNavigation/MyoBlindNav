@@ -10,7 +10,7 @@
     <string name="arm_right">Right Arm</string>
     <string name="waiting_gps">Waiting for GPS location...</string>
     <string name="connected">Connected Myos:</string>
-    <string name="buzz_left">Buzz left</string>
-    <string name="buzz_right">Buzz right</string>
+    <string name="buzz_left">Left</string>
+    <string name="buzz_right">Right</string>
 
 </resources>

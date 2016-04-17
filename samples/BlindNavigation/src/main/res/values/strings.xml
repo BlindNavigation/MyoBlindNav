@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Hello World</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Blind Navigation</string>
+    <string name="navigate">Navigate!</string>
     <string name="scan">Scan</string>
     <string name="pose_fist">Fist</string>
     <string name="pose_wavein">Wave In</string>

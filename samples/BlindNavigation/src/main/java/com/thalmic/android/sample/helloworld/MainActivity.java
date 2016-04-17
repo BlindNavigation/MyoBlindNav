@@ -19,7 +19,6 @@ import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
-import com.thalmic.myo.Pose;
 import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
@@ -64,7 +63,7 @@ public class MainActivity extends Activity {
         // when Myo is moved around on the arm.
         @Override
         public void onArmUnsync(Myo myo, long timestamp) {
-            mTextView.setText(R.string.hello_world);
+            mTextView.setText(R.string.navigate);
         }
 
         // onUnlock() is called whenever a synced Myo has been unlocked. Under the standard locking
@@ -106,7 +105,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hello_world);
+        setContentView(R.layout.activity_navigate);
 
         mLockStateView = (TextView) findViewById(R.id.lock_state);
         mTextView = (TextView) findViewById(R.id.text);
